@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.OrderMapper">
+	<resultMap type="Order" id="BaseResultMap">
+		<id property="orderId" column="order_id" javaType="java.lang.String" />
+		<result property="orderUser.userId" column="order_user" javaType="java.lang.Integer" />
+		<result property="orderDate" column="order_date" javaType="java.util.Date" />
+		<result property="orderPrice" column="order_price" javaType="java.lang.Double" />
+		<result property="orderState" column="order_state" javaType="java.lang.Integer" />
+		<result property="orderUserName" column="order_username" javaType="java.lang.String" />
+		<result property="orderPhone" column="order_phone" javaType="java.lang.String" />
+		<result property="orderAddress" column="order_address" javaType="java.lang.String" />
+		<result property="orderExpressNo" column="order_expressno" javaType="java.lang.String" />
+	</resultMap>
+	<resultMap type="com.phonemarket.util.OrderVO" id="Base">
+		<result property="totalMoney" column="totalMoney" javaType="java.lang.Long" />
+		<result property="orderMonth" column="orderMonth" javaType="java.lang.String" />
+		<result property="sheets" column="sheets" javaType="java.lang.Integer" />
+	</resultMap>
+	<resultMap type="Order" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="orderUser" column="order_user" javaType="Users" select="com.phonemarket.mapper.UserMapper.findUserById"></association>
+	</resultMap>	
+	<select id="findOrderById" parameterType="java.lang.String" resultMap="BaseResultMapJoinObj">
+		select * from `order` where order_id=#{id}
+	</select>
+	<insert id="addOrder" parameterType="Order">
+		INSERT INTO `order` (`order_id`, `order_User`, `order_Date`, `order_Price`, `order_UserName`, `order_Phone`, `order_Address`) 
+		VALUES (#{orderId}, #{orderUser.userId}, #{orderDate}, #{orderPrice}, #{orderUserName}, #{orderPhone}, #{orderAddress})
+	</insert>
+	<update id="updateOrder" parameterType="Order">
+		update `order`
+		<set>
+			<if test="orderUser!=null">
+				order_user=#{orderUser.userId},
+			</if>
+			<if test="orderDate!=null">
+				order_date=#{orderDate},
+			</if>
+			<if test="orderPrice!=null">
+				order_price=#{orderPrice},
+			</if>
+			<if test="orderUserName!=null">
+				order_username=#{orderUserName},
+			</if>
+			<if test="orderPhone!=null">
+				order_phone=#{orderPhone},
+			</if>
+			<if test="orderAddress!=null">
+				order_address=#{orderAddress}
+			</if>
+		</set>
+		where order_id=#{orderId}
+	</update>
+	<update id="deleteOrder" parameterType="java.lang.String">
+		update `order` set order_state=-1 where order_id=#{id}
+	</update>
+	<update id="payOrder" parameterType="java.lang.String">
+		update  `order` set order_state=2 where order_id=#{id}
+	</update>
+	<update id="deliverOrder" parameterType="java.lang.String">
+		update  `order` set order_state=3,order_expressno=#{1} where order_id=#{0}
+	</update>
+	<update id="receiveOrder" parameterType="java.lang.String">
+		update `order` set order_state=4 where order_id=#{id}
+	</update>
+	<update id="evaOrder" parameterType="java.lang.String">
+		update `order` set order_state=5 where order_id=#{id}
+	</update>
+	<select id="findAllOrderBySearchVO" parameterType="com.phonemarket.util.OrderSearchVO" resultMap="BaseResultMapJoinObj">
+		select * from `order` 
+		<where>
+			order_state &gt; 0
+			<if test="orderIdKeyword!=null and orderIdKeyword!=''">
+				and order_id like '%${orderIdKeyword}%'
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				and order_date &gt;=#{startDate}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				and order_date &lt;=#{endDate}
+			</if>
+			<if test="orderState!=null and orderState!=''">
+				and order_state=#{orderState}
+			</if>
+		</where>
+	</select>
+	<select id="findAllOrder" resultMap="BaseResultMapJoinObj">
+		select * from `order` where order_state &gt; 0
+	</select>
+	<select id="findOrderByUser" resultMap="BaseResultMapJoinObj">
+		select * from `order` where order_state &gt; 0 and order_user=#{id}
+	</select>
+	<select id="findOrderByUserAndState" resultMap="BaseResultMapJoinObj">
+		select * from `order` where order_state=#{0} and order_user=#{1}
+	</select>
+	<select id="findTotalMoneyByMonth" parameterType="java.lang.Integer" resultMap="Base">
+		select sum(order_price) as totalMoney,date_format(order_Date, '%Y-%m') orderMonth, 
+		count(order_id) as sheets from `order` group by orderMonth ORDER BY orderMonth asc LIMIT #{limit}
+	</select>
+	<select id="findTotalOrder" resultType="java.lang.Integer">
+		SELECT count(order_id) total from `order`
+	</select>
+	<select id="findTotalDeliverOrder" resultType="java.lang.Integer">
+		select count(order_id) num FROM `order` where order_State=2;
+	</select>
+</mapper>

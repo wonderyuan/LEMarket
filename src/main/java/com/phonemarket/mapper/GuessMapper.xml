@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.GuessMapper">
+	<resultMap type="Guess" id="BaseResult">
+		<id property="guessId" column="guess_id" javaType="java.lang.Integer" />
+		<result property="guessGoods.goodsId" column="guess_goods" javaType="java.lang.Integer"  />
+		<result property="guessNum" column="guess_num" javaType="java.lang.Integer" />
+		<result property="favorite" column="favorite" javaType="java.lang.Integer" />
+		<result property="guessUser.userId" column="guess_user" javaType="java.lang.Integer" />
+	</resultMap>
+	<resultMap type="Guess" id="BaseResultJoinObj" extends="BaseResult">
+		<association property="guessGoods" javaType="Goods" column="guess_goods" select="com.phonemarket.mapper.GoodsMapper.findGoodsById"></association>
+		<association property="guessUser" javaType="Users" column="guess_user" select="com.phonemarket.mapper.UserMapper.findUserById"></association>
+	</resultMap>
+	<select id="findAllGuess" resultMap="BaseResultJoinObj">
+		select * from guess
+	</select>
+	<insert id="saveGuess" parameterType="Guess">
+		insert into Guess(guess_goods,guess_num,guess_user)
+		values(#{guessGoods.goodsId},#{guessNum},#{guessUser.userId})
+	</insert>
+	<delete id="deleteGuess" parameterType="java.lang.Integer">
+		delete from guess where guess_id=#{id}
+	</delete>
+	<update id="updateGuess">
+		update guess
+		<set>
+			<if test="guessGoods!=null and guessGoods.goodsId!=null">
+				guess_goods=#{guessGoods.goodsId},
+			</if>
+			<if test="guessNum!=null">
+				guess_num=#{guessNum},
+			</if>
+			<if test="guessUser!=null and guessUser.userId!=null">
+				guess_user=#{guessUser.userId}
+			</if>
+		</set>
+		where guess_id=#{guessId}
+	</update>
+	<update id="addGoodsToFavorite" parameterType="java.lang.Integer">
+		update guess set favorite=1 where guess_goods=#{0} and guess_user=#{1}
+	</update>
+	<update id="cancelFavorite" parameterType="java.lang.Integer">
+		update guess set favorite=-1 where guess_goods=#{0} and guess_user=#{1}
+	</update>
+	<select id="findAllGuessByUserId" parameterType="java.lang.Integer" resultMap="BaseResult">
+		select * from guess where guess_user=#{id}
+	</select>
+	<select id="findAllFavoriteByUserId" parameterType="java.lang.Integer" resultMap="BaseResultJoinObj">
+		select * from guess where favorite &gt;0 and guess_user=#{id}
+	</select>
+	<select id="findMostLikeLimit" parameterType="java.lang.Integer" resultMap="BaseResultJoinObj">
+		select * from guess where guess_user=#{0} order by guess_num desc limit #{1}
+	</select>
+	<select id="findGuessByUserId" parameterType="java.lang.Integer" resultMap="BaseResultJoinObj">
+		select * from guess where guess_user=#{0} and guess_goods=#{1}
+	</select>
+	<select id="findRecentReviewGoods" parameterType="java.lang.Integer" resultMap="BaseResultJoinObj">
+		select * from guess where guess_user=#{0} and favorite=-1 order by guess_num desc limit #{1}
+	</select>
+	<select id="findMostHotGoods" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+		select sum(guess_num) num,guess_goods g from guess GROUP BY guess_goods ORDER BY num desc limit #{limit}
+	</select>
+</mapper>

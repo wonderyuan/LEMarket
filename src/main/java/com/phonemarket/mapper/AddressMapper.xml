@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.AddressMapper">
+	<resultMap type="Address" id="BaseResultMap">
+		<id property="addrId" column="addr_id" />
+		<result property="addrProvince" column="addr_province" />
+		<result property="addrCity" column="addr_city" />
+		<result property="addrArea" column="addr_area" />
+		<result property="addrDetail" column="addr_detail" />
+		<result property="addrUser" column="addr_user"  />
+		<result property="addrZipcode" column="addr_zipcode" />
+		<result property="addrPhone" column="addr_phone" />
+		<result property="addrNickname" column="addr_nickname" />
+		<result property="addrState" column="addr_state" />
+	</resultMap>
+	<insert id="addAddress" parameterType="Address">
+		insert into address(addr_province,addr_city,addr_area,addr_detail,addr_user,addr_zipcode,addr_phone,addr_nickname)
+		values(#{addrProvince},#{addrCity},#{addrArea},#{addrDetail},#{addrUser},#{addrZipcode},#{addrPhone},#{addrNickname})
+	</insert>
+	<update id="deleteAddr" parameterType="java.lang.Integer">
+		update address set addr_state=-1 where addr_id=#{id}
+	</update>
+	<update id="updateAddr" parameterType="Address">
+		update address
+		<set>
+			<if test="addrProvince!=null">
+				addr_province=#{addrProvince},
+			</if>
+			<if test="addrCity!=null">
+				addr_city=#{addrCity},
+			</if>
+			<if test="addrArea!=null">
+				addr_area=#{addrArea},
+			</if>
+			<if test="addrDetail!=null">
+				addr_detail=#{addrDetail},
+			</if>
+			<if test="addrUser!=null">
+				addr_user=#{addrUser},
+			</if>
+			<if test="addrZipcode!=null">
+				addr_zipcode=#{addrZipcode},
+			</if>
+			<if test="addrPhone!=null">
+				addr_phone=#{addrPhone},
+			</if>
+			<if test="addrNickname!=null">
+				addr_nickname=#{addrNickname}
+			</if>
+		</set>
+		where addr_id=#{addrId}
+	</update>
+	<select id="findAddrById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from address where addr_id=#{id}
+	</select>
+	<select id="findAddrByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from address where addr_user=#{id} and addr_state=1
+	</select>
+</mapper>

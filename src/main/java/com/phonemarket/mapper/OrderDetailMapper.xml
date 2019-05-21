@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.OrderDetailMapper">
+	<resultMap type="OrderDetail" id="BaseResultMap">
+		<id property="detailId" column="detail_id" />
+		<result property="detailOrder.orderId" column="detail_order" />
+		<result property="detailGoods.goodsId" column="detail_goods" />
+		<result property="detailPrice" column="detail_price" />
+		<result property="detailNum"  column="detail_num" />
+	</resultMap>
+	<resultMap type="OrderDetail" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="detailOrder" column="detail_order" javaType="Order" select="com.phonemarket.mapper.OrderMapper.findOrderById"></association>
+		<association property="detailGoods" column="detail_goods" javaType="Goods" select="com.phonemarket.mapper.GoodsMapper.findGoodsById"></association>
+	</resultMap>
+	<insert id="addOrderDetail" parameterType="OrderDetail">
+		insert into order_detail(detail_order,detail_goods,detail_price,detail_num)
+		values(#{detailOrder.orderId},#{detailGoods.goodsId},#{detailPrice},#{detailNum})
+	</insert>
+	<select id="findOrderDetailById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from order_detail where detail_id=#{id}
+	</select>
+	<update id="updateOrderDetail">
+		update order_detail
+		<set>
+			<if test="detailOrder!=null and detailOrder.orderId!=null">
+				detail_order=#{detailOrder.orderId},
+			</if>
+			<if test="detailGoods!=null and detailGoods.goodsId!=null">
+				detail_goods=#{detailGoods.goodsId},
+			</if>
+			<if test="detailPrice!=null">
+				detail_price=#{detailPrice},
+			</if>
+			<if test="detailNum!=null">
+				detail_num=#{detailNum}
+			</if>
+		</set>
+		where detail_id=#{detailId}
+	</update>
+	<select id="findOrderDetailByOrderId" parameterType="java.lang.String" resultMap="BaseResultMapJoinObj">
+		select * from order_detail where detail_order=#{id}
+	</select>
+</mapper>

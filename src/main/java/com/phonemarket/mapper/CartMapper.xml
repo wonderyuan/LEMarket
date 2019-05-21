@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.CartMapper">
+	<resultMap type="Cart" id="BaseResultMap">
+		<id property="cartId" column="cart_id" javaType="java.lang.Integer" />
+		<result property="cartGoods.goodsId" column="cart_goods"  javaType="java.lang.Integer" />
+		<result property="cartNum" column="cart_num" javaType="java.lang.Integer" />
+		<result property="cartPrice" column="cart_price" javaType="java.lang.Double" />
+		<result property="cartUser.userId" column="cart_user" javaType="java.lang.Integer" />
+	</resultMap>
+	<resultMap type="Cart" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="cartGoods" column="cart_goods" javaType="Goods" select="com.phonemarket.mapper.GoodsMapper.findGoodsById"></association>
+		<association property="cartUser" column="cart_user" javaType="Users" select="com.phonemarket.mapper.UserMapper.findUserById"></association>
+	</resultMap>
+	<select id="findCartById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from cart where cart_id=#{id}
+	</select>
+	<insert id="addCart" parameterType="Cart">
+		insert into cart(cart_goods,cart_num,cart_price,cart_user)
+		values(#{cartGoods.goodsId},#{cartNum},#{cartPrice},#{cartUser.userId})
+	</insert>
+	<delete id="deleteCart" parameterType="java.lang.Integer">
+		delete from cart where cart_id=#{id}
+	</delete>
+	<update id="updateCart" parameterType="Cart">
+		update cart
+		<set>
+			<if test="cartGoods!=null and cartGoods.goodsId!=null">
+				cart_goods=#{cartGoods.goodsId},
+			</if>
+			<if test="cartNum!=null">
+				cart_num=#{cartNum},
+			</if>
+			<if test="cartPrice!=null">
+				cart_price=#{cartPrice},
+			</if>
+			<if test="cartUser!=null and cartUser.userId!=null">
+				cart_user=#{cartUser.userId}
+			</if>
+		</set>
+		where cart_id=#{cartId}
+	</update>
+	<select id="findCartListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from cart where cart_user=#{id}
+	</select>
+	<select id="findCartByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from cart where cart_user=#{0} and cart_goods=#{1}
+	</select>
+</mapper>

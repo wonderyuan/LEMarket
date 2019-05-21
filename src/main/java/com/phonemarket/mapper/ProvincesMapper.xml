@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.ProvincesMapper">
+	<resultMap type="Provinces" id="BaseResultMap">
+		<id property="provinceId" column="province_id" javaType="java.lang.String" />
+		<result property="provinceName" column="province_name" javaType="java.lang.String" />
+	</resultMap>
+	<select id="findAllProvince" resultMap="BaseResultMap">
+		select * from provinces
+	</select>
+	<select id="findProByProName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from provinces where province_name=#{name}
+	</select>
+	<select id="findProByProId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from provinces where province_id=#{id}
+	</select>
+</mapper>

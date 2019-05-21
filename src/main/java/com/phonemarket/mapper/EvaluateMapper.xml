@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.EvaluateMapper">
+	<resultMap type="Evaluate" id="BaseResultMap">
+		<id property="evaId" column="eva_id" />
+		<result property="evaUser.userId" column="eva_user" />
+		<result property="evaContent" column="eva_content" />
+		<result property="evaDate" column="eva_date" />
+		<result property="evaGoods.goodsId" column="eva_goods" />
+		<result property="evaState" column="eva_state" />
+		<result property="evaLevel" column="eva_level" />
+	</resultMap>
+	<resultMap type="Evaluate" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="evaUser" column="eva_user" javaType="Users" select="com.phonemarket.mapper.UserMapper.findUserById"></association>
+		<association property="evaGoods" column="eva_goods"  javaType="Goods" select="com.phonemarket.mapper.GoodsMapper.findGoodsById"></association>
+	</resultMap>
+	<select id="findEvaById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_id=#{id}
+	</select>
+	<insert id="addEvaluate" parameterType="Evaluate">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="evaId">
+          SELECT LAST_INSERT_ID()
+      	</selectKey>
+		insert into evaluate(eva_user,eva_content,eva_date,eva_goods,eva_level)
+		values(#{evaUser.userId},#{evaContent},#{evaDate},#{evaGoods.goodsId},#{evaLevel})
+	</insert>
+	<update id="deleteEvaluate" parameterType="java.lang.Integer">
+		update evaluate set eva_state=-1 where eva_id=#{id}
+	</update>
+	<update id="updateEvaluate" parameterType="Evaluate">
+		update evaluate
+		<set>
+			<if test="evaUser!=null and evaUser.userId!=null">
+				eva_user=#{evaUser.userId},
+			</if>
+			<if test="evaContent!=null">
+				eva_content=#{evaContent},
+			</if>
+			<if test="evaDate!=null">
+				eva_date=#{evaDate},
+			</if>
+			<if test="evaGoods!=null and evaGoods.goodsId!=null">
+				eva_goods=#{evaGoods.goodsId},
+			</if>
+			<if test="evaLevel!=null">
+				eva_level=#{evaLevel}
+			</if>
+		</set>
+		where eva_id=#{evaId}
+	</update>
+	<select id="findEvaByGoodsId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_goods=#{id}
+	</select>
+	<select id="findEvaByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_user=#{id}
+	</select>
+	<select id="findAllEvalute" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_state &gt; 0
+	</select>
+	<select id="findAllEvaluteLikeContent" parameterType="java.lang.String" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_state &gt; 0 and eva_content like '%${value}%'
+	</select>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.UserMapper">
+	<resultMap type="Users" id="BaseResultMap">
+		<id property="userId" column="user_id" javaType="java.lang.Integer" />
+		<result property="userName" column="user_name" javaType="java.lang.String" />
+		<result property="userPass" column="user_pass" javaType="java.lang.String" />
+		<result property="userPhone" column="user_phone" javaType="java.lang.String" />
+		<result property="userEmail" column="user_email" javaType="java.lang.String" />
+		<result property="userState" column="user_state" javaType="java.lang.Integer" />
+		<result property="userImg" column="user_img" javaType="java.lang.String" />
+	</resultMap>
+	<select id="findUserById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from users where user_id=#{id}
+	</select>
+	<insert id="addUser" parameterType="Users">
+		insert into users(user_name,user_pass,user_phone,user_email)
+		values(#{userName},#{userPass},#{userPhone},#{userEmail})
+	</insert>
+	<update id="deleteUser" parameterType="java.lang.Integer">
+		update users set user_state=-1 where user_id=#{id}
+	</update>
+	<update id="changeUserState" parameterType="java.lang.Integer">
+		update users set user_state=#{0} where user_id=#{1}
+	</update>
+	<update id="updateUser" parameterType="Users">
+		update users
+		<set>
+			<if test="userName!=null">
+				user_name=#{userName},
+			</if>
+			<if test="userPass!=null">
+				user_pass=#{userPass},
+			</if>
+			<if test="userPhone!=null">
+				user_phone=#{userPhone},
+			</if>
+			<if test="userEmail!=null">
+				user_email=#{userEmail},
+			</if>
+			<if test="userImg!=null">
+				user_img=#{userImg}
+			</if>
+		</set>
+		where user_id=#{userId}
+	</update>
+	<select id="findAllUser" resultMap="BaseResultMap">
+		select * from users where user_state &gt; 0
+	</select>
+	<select id="findAllUserLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from users where user_state &gt; 0 and user_name like '%${value}%'
+	</select>
+	<select id="findUserByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select * from users where user_name=#{name} and user_state=1
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

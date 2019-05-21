@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.AreasMapper">
+	<resultMap type="Areas" id="BaseResultMap">
+		<id property="areaId" column="area_id" javaType="java.lang.String" />
+		<result property="areaName" column="area_name" javaType="java.lang.String" />
+		<result property="cityId" column="city_id" javaType="java.lang.String" />
+	</resultMap>
+	<select id="findAreasByCityId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from areas where city_id=#{id}
+	</select>
+	<select id="findAreaByAreaName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from areas where area_name=#{0} and city_id=#{1}
+	</select>
+	<select id="findAreaById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from areas where area_id=#{id}
+	</select>
+</mapper>

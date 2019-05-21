@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.AdminsMapper">
+	<resultMap type="Admins" id="BaseResultMap">
+		<id property="adminId" column="admin_id" />
+		<result property="adminName" column="admin_name" />
+		<result property="adminPass" column="admin_pass" />
+		<result property="adminPhone" column="admin_phone" />
+		<result property="adminDate" column="admin_date" />
+		<result property="adminState" column="admin_state" />
+		<result property="adminRole.roleId" column="admin_role" />
+	</resultMap>
+	<resultMap type="Admins" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="adminRole" column="admin_role" javaType="Role" select="com.phonemarket.mapper.RoleMapper.findById"></association>
+	</resultMap>
+	<select id="findAdminById" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from admins where admin_id=#{id}
+	</select>
+	<insert id="addAdmins" parameterType="Admins">
+		insert into admins(admin_name,admin_pass,admin_phone,admin_date,admin_role)
+		values(#{adminName},#{adminPass},#{adminPhone},#{adminDate},#{adminRole.roleId})
+	</insert>
+	<update id="deleteAdmin" parameterType="java.lang.Integer">
+		update admins set admin_state=-1 where admin_id=#{id}		
+	</update>
+	<update id="disableAdmin" parameterType="java.lang.Integer">
+		update admins set admin_state=2 where admin_id=#{id}
+ 	</update>
+ 	<update id="updateAdmin" parameterType="Admins">
+ 		update admins
+ 		<set>
+ 			<if test="adminName!=null">
+ 				admin_name=#{adminName},
+ 			</if>
+ 			<if test="adminPass!=null">
+ 				admin_pass=#{adminPass},
+ 			</if>
+ 			<if test="adminPhone!=null">
+ 				admin_phone=#{adminPhone},
+ 			</if>
+ 			<if test="adminDate!=null">
+ 				admin_date=#{adminDate},
+ 			</if>
+ 			<if test="adminRole!=null and adminRole.roleId!=null">
+ 				admin_role=#{adminRole.roleId}
+ 			</if>
+ 		</set>
+ 		where admin_id=#{adminId}
+ 	</update>
+ 	<select id="findAllAdmin" resultMap="BaseResultMapJoinObj">
+ 		select * from admins where admin_state &gt; 0
+ 	</select>
+ 	<select id="findAdminByName" parameterType="java.lang.String" resultMap="BaseResultMapJoinObj">
+ 		select * from admins where admin_name=#{name} and admin_state=1
+ 	</select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.BannerMapper">
+	<resultMap type="Banner" id="BaseResultMap">
+		<id property="bannerId" column="banner_id" />
+		<result property="bannerName" column="banner_name" />
+		<result property="bannerUrl" column="banner_url" />
+		<result property="bannerImg" column="banner_img" />
+		<result property="bannerState" column="banner_state" />
+	</resultMap>
+	<insert id="addBanner" parameterType="Banner">
+		insert into banner(banner_name,banner_url,banner_img)
+		values(#{bannerName},#{bannerUrl},#{bannerImg})
+	</insert>
+	<update id="deleteBanner" parameterType="java.lang.Integer">
+		update banner set banner_state=-1 where banner_id=#{id}
+	</update>
+	<update id="changeBannerState" parameterType="java.lang.Integer">
+		update banner set banner_state=#{0} where banner_id=#{1}
+	</update>
+	<update id="updateBanner" parameterType="Banner">
+		update banner
+		<set>
+			<if test="bannerName!=null">
+				banner_name=#{bannerName},
+			</if>
+			<if test="bannerUrl!=null">
+				banner_url=#{bannerUrl},
+			</if>
+			<if test="bannerImg!=null">
+				banner_img=#{bannerImg}
+			</if>
+		</set>
+		where banner_id=#{bannerId}
+	</update>
+	<select id="findBannerById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from banner where banner_id=#{id}
+	</select>
+	<select id="findAllBanner" resultMap="BaseResultMap">
+		select * from banner where banner_state &gt; 0
+	</select>
+	<select id="findAllBannerByLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from banner where banner_state &gt; 0 and banner_name like '%${value}%'
+	</select>
+	<select id="findAllShowBanner" resultMap="BaseResultMap">
+		select * from banner where banner_state=1
+	</select>		
+</mapper>

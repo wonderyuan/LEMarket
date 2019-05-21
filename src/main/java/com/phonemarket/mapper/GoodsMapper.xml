@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phonemarket.mapper.GoodsMapper">
+	<resultMap type="Goods" id="BaseGoods">
+		<id property="goodsId" column="goods_id" javaType="java.lang.Integer" />
+		<result property="goodsName" column="goods_name" javaType="java.lang.String" />
+		<result property="goodsPrice" column="goods_price" javaType="java.lang.Double" />
+		<result property="goodsNum" column="goods_num" javaType="java.lang.Integer" />
+		<result property="goodsType.typeId" column="goods_type" javaType="java.lang.Integer" />
+		<result property="goodsMemory.memoryId" column="goods_memory" javaType="java.lang.Integer" />
+		<result property="goodsColor" column="goods_Color" javaType="java.lang.String" />
+		<result property="goodsImg" column="goods_Img" javaType="java.lang.String" />
+		<result property="goodsState" column="goods_State" javaType="java.lang.Integer" />
+		<result property="goodsDesc" column="goods_Desc" javaType="java.lang.String" />
+		<result property="goodsVolume" column="goods_Volume" javaType="java.lang.Integer" />
+	</resultMap>
+	<resultMap type="Goods" id="BaseGoodsJoinObject" extends="BaseGoods">
+		<association property="goodsType" javaType="GoodsType" column="goods_type" select="com.phonemarket.mapper.GoodsTypeMapper.findTypeById"></association>
+		<association property="goodsMemory" javaType="Memory" column="goods_memory" select="com.phonemarket.mapper.MemoryMapper.findMemoryById"></association>
+	</resultMap>
+	<select id="findAllBaseData" resultMap="BaseGoods">
+		select * from goods
+	</select>
+	<select id="findAll" resultMap="BaseGoodsJoinObject">
+		select * from goods where goods_state &gt;0
+	</select>
+	<select id="findHotGoods" resultMap="BaseGoodsJoinObject">
+		select * from goods where goods_state=2 limit #{num}
+	</select>
+	<insert id="saveGoods" parameterType="Goods">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="goodsId">
+          SELECT LAST_INSERT_ID()
+      	</selectKey>
+		insert into goods(goods_name,goods_price,goods_num,goods_type,goods_memory,goods_color,goods_img,goods_Desc)
+		values(#{goodsName},#{goodsPrice},#{goodsNum},#{goodsType.typeId},#{goodsMemory.memoryId},#{goodsColor},
+		#{goodsImg},#{goodsDesc})
+	</insert>
+	<update id="deleteGoods" parameterType="java.lang.Integer">
+		update goods set goods_state=-1 where goods_id=#{id}
+	</update>
+	
+	<update id="updateGoods" parameterType="Goods">
+		update goods
+		<set>
+			<if test="goodsName!=null and goodsName!=''">
+				goods_name=#{goodsName},
+			</if>
+			<if test="goodsPrice!=null">
+				goods_price=#{goodsPrice},
+			</if>
+			<if test="goodsNum!=null">
+				goods_num=#{goodsNum},
+			</if>
+			<if test="goodsType!=null and goodsType.typeId!=null">
+				goods_type=#{goodsType.typeId},
+			</if>
+			<if test="goodsMemory!=null and goodsMemory.memoryId!=null">
+				goods_memory=#{goodsMemory.memoryId},
+			</if>
+			<if test="goodsColor!=null">
+				goods_color=#{goodsColor},
+			</if>
+			<if test="goodsImg!=null">
+				goods_img=#{goodsImg},
+			</if>
+			<if test="goodsDesc!=null">
+				goods_desc=#{goodsDesc},
+			</if>
+			<if test="goodsVolume!=null">
+				goods_volume=#{goodsVolume}
+			</if>
+		</set>
+		where goods_id=#{goodsId}
+	</update>
+	<select id="findGoodsById" parameterType="java.lang.Integer" resultMap="BaseGoodsJoinObject">
+		select * from goods where goods_id=#{id}
+	</select>
+	<select id="findGoodsByType" parameterType="java.lang.Integer" resultMap="BaseGoodsJoinObject">
+		select * from goods where goods_type=#{id}
+	</select>
+	<select id="findGoodsLikeName" parameterType="java.lang.String" resultMap="BaseGoodsJoinObject">
+		select * from goods where goods_name like '%${value}%' and goods_state &gt; 0
+	</select>
+	<select id="findGoodsByVolume" parameterType="java.lang.Integer" resultMap="BaseGoodsJoinObject">
+		select * from goods where goods_state &gt; 0 order by goods_volume desc limit #{0}
+	</select>
+	
+</mapper>
