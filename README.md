@@ -1,6 +1,6 @@
 # 乐享手机商城 LEMarket
 
-###演示地址  http://47.112.127.132:8080/LEMarket/view/index 暂开放前台，后台有需要再开放
+### 演示地址  http://47.112.127.132:8080/LEMarket/view/index 暂开放前台，后台有需要再开放
 
 ### 基于Spring+Spring MVC+Mybatis+layui框架构建的手机商城系统
 ### 实现功能
