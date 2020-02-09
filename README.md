@@ -46,7 +46,7 @@
 
 ### 数据库设计预览
 
-![Image text](https://gitee.com/yuanundo/ImageStore/blob/master/sql.png)
+[<img src="https://gitee.com/yuanundo/ImageStore/blob/master/sql.png">]
 
 ### 前台预览
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/qian1.png)
