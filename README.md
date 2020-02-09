@@ -45,8 +45,7 @@
 >支付模块采用调用支付宝接口进行支付，需要在com.phonemarket.util.alipayconfig文件中配置应用id以及公钥私钥等配置信息，才能够正确调用支付模块，可以自行去支付宝开发平台申请开发者账户应用进行配置即可。<br/>
 
 ### 数据库设计预览
-
-<img src="https://gitee.com/yuanundo/ImageStore/blob/master/sql.png" width="100px">
+![Image text](https://151.101.184.133/wonderyuan/Image-Storage/blob/master/sql.png)
 
 ### 前台预览
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/qian1.png)
