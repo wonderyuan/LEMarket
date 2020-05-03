@@ -3,7 +3,7 @@
 # 乐享手机商城 LEMarket
 
 ### 演示地址 暂开放前台，后台有需要再开放，比例不对请适当放大缩小显示比例，演示的支付去除了支付宝支付。
->如需完整版代码，请联系博主QQ528290695。
+### 如需完整版代码，请联系博主QQ: 528290695。
 
 ### 基于Spring+Spring MVC+Mybatis+layui框架构建的手机商城系统
 ### 实现功能
@@ -45,6 +45,19 @@
 >本项目展示部分主要使用layui小型轻巧的前端框架构建，主要使用到layui的动态数据表格分页渲染、弹出层模块、轮播模块、评分模块、文件上传模块、laydate日期选择模块、表单验证等等，layui比bootstrap感觉更易上手，功能也更加切合项目的需求。<br/>
 >项目前端展示使用Redis来进行缓存商品的详细信息以及评价，缓解数据库负载，项目运行需要在spring配置文件中配置好redis的连接信息。<br/>
 >支付模块采用调用支付宝接口进行支付，需要在com.phonemarket.util.alipayconfig文件中配置应用id以及公钥私钥等配置信息，才能够正确调用支付模块，可以自行去支付宝开发平台申请开发者账户应用进行配置即可。<br/>
+
+>2020年5月3日更新
+* 前后台登录新增记住密码、验证码功能及前后台跳转
+* 完善权限管理，现超管可在后台添加角色分配不同的权限，新增管理员，给管理员分配不同的角色从而拥有不同的权限
+* 管理员密码信息修改优化
+* 前台查询优化
+* 其他bug修改
+### 部分新增点预览
+![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update1.png)
+![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update2.png)
+![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update3.png)
+![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update4.png)
+![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update5.png)
 
 ### 数据库设计预览
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/sql.png)
