@@ -3,7 +3,7 @@
 # 乐享手机商城 LEMarket
 
 ### 演示地址 暂开放前台，后台有需要再开放，比例不对请适当放大缩小显示比例，演示的支付去除了支付宝支付。
-### 如需完整版代码，请联系博主QQ: 528290695。
+### 如需完整版代码，请联系博主QQ,有偿: 528290695，可帮助部署调试等。
 
 ### 基于Spring+Spring MVC+Mybatis+layui框架构建的手机商城系统
 ### 实现功能
@@ -53,7 +53,6 @@
 * 前台查询商品优化
 * 其他bug修改
 ### 部分新增点预览
-[<img src="https://gitee.com/yuanundo/ImageStore/blob/master/qian1.png" >]
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update1.png)
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update2.png)
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update3.png)
