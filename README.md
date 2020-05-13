@@ -53,6 +53,7 @@
 * 前台查询商品优化
 * 其他bug修改
 ### 部分新增点预览
+[<img src="https://gitee.com/yuanundo/ImageStore/blob/master/qian1.png" >]
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update1.png)
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update2.png)
 ![Image text](https://github.com/wonderyuan/Image-Storage/blob/master/update3.png)
