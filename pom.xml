@@ -36,7 +36,7 @@
 		<zkclient.version>0.1</zkclient.version>
 		<activemq.version>5.11.2</activemq.version>
 		<freemarker.version>2.3.23</freemarker.version>
-		<quartz.version>2.2.2</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
 		<fastjson.version>1.2.8</fastjson.version>
 		<aplipay.version>3.1.0</aplipay.version>
 	</properties>
